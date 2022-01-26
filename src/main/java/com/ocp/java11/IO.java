@@ -1,7 +1,11 @@
 package com.ocp.java11;
 
+import com.ocp.java11.utils.model.Product;
+import com.ocp.java11.utils.model.ProductList;
+
 import java.io.*;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -14,9 +18,29 @@ public class IO {
     private static final String INPUT_FILE_PATH = "src/main/resources/io/input.txt";
     private static final String OUTPUT_FILE_PATH = "src/main/resources/io/output.txt";
     private static final String STOCKS_FILE_PATH = "src/main/resources/io/stocks.txt";
+    private static final String OBJECTS_FILE_PATH = "src/main/resources/io/objects.txt";
 
     public static void main(String[] args) throws IOException {
-        scannerStream();
+        objectStream();
+    }
+
+    private static void objectStream() {
+        List<Product> productList = List.of(
+                new Product(1, "PA"),
+                new Product(2, "P2"));
+
+
+        try {
+            ProductList list = new ProductList(productList);
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(OBJECTS_FILE_PATH));
+            out.writeObject(productList);
+            list = null;
+
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(OBJECTS_FILE_PATH));
+            System.out.println(ois.readObject());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     //Scanner is the powerful tool to read file, read in token and then transfer token into respective
